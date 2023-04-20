@@ -43,6 +43,7 @@ extern char **environ;
  * @str: a string
  * @next: points to the next node
  */
+
 typedef struct liststr
 {
 	int num;
@@ -72,6 +73,7 @@ typedef struct liststr
  *@readfd: the fd from which to read line input
  *@histcount: the history line number count
  */
+
 typedef struct passinfo
 {
 	char *arg;
@@ -104,6 +106,7 @@ typedef struct passinfo
  *@type: the builtin command flag
  *@func: the function
  */
+
 typedef struct builtin
 {
 	char *type;
@@ -111,16 +114,16 @@ typedef struct builtin
 } builtin_table;
 
 
-/* toem_shloop.c */
+/* toem_loop_sh.c */
 int hsh(info_t *, char **);
-int find_builtin(info_t *);
-void find_cmd(info_t *);
-void fork_cmd(info_t *);
+int look_builtin(info_t *);
+void search_cmd(info_t *);
+void forkk_cmd(info_t *);
 
-/* toem_parser.c */
-int is_cmd(info_t *, char *);
-char *dup_chars(char *, int, int);
-char *find_path(info_t *, char *, char *);
+/* toem_pars.c */
+int exe_cmd(info_t *, char *);
+char *dupl_chars(char *, int, int);
+char *look_path(info_t *, char *, char *);
 
 /* loophsh.c */
 int loophsh(char **);
@@ -131,15 +134,15 @@ int _eputchar(char);
 int _putfd(char c, int fd);
 int _putsfd(char *str, int fd);
 
-/* toem_string.c */
-int _strlen(char *);
-int _strcmp(char *, char *);
-char *starts_with(const char *, const char *);
-char *_strcat(char *, char *);
+/* toem_strg.c */
+int _lenstr(char *);
+int _cmpstr(char *, char *);
+char *begins_with(const char *, const char *);
+char *_catstr(char *, char *);
 
-/* toem_string1.c */
-char *_strcpy(char *, char *);
-char *_strdup(const char *);
+/* toem_strg1.c */
+char *_cpystr(char *, char *);
+char *_dupstr(const char *);
 void _puts(char *);
 int _putchar(char);
 
@@ -148,23 +151,23 @@ char *_strncpy(char *, char *, int);
 char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
 
-/* toem_tokenizer.c */
-char **strtow(char *, char *);
-char **strtow2(char *, char);
+/* toem_tok.c */
+char **_strtow1(char *, char *);
+char **_strtow2(char *, char);
 
-/* toem_realloc.c */
-char *_memset(char *, char, unsigned int);
-void ffree(char **);
-void *_realloc(void *, unsigned int, unsigned int);
+/* toem_reallot.c */
+char *_memsett(char *, char, unsigned int);
+void empt(char **);
+void *_reallot(void *, unsigned int, unsigned int);
 
 /* toem_memory.c */
 int bfree(void **);
 
-/* toem_atoi.c */
-int interactive(info_t *);
-int is_delim(char, char *);
-int _isalpha(int);
-int _atoi(char *);
+/* toem_atoii.c */
+int flexible(info_t *);
+int is_deli(char, char *);
+int _isalphab(int);
+int _atoii(char *);
 
 /* toem_errors1.c */
 int _erratoi(char *);
@@ -173,14 +176,14 @@ int print_d(int, int);
 char *convert_number(long int, int, int);
 void remove_comments(char *);
 
-/* toem_builtin.c */
-int _myexit(info_t *);
-int _mycd(info_t *);
-int _myhelp(info_t *);
+/* toem_get_inbuilt.c */
+int _myext(info_t *);
+int _mycurdir(info_t *);
+int _myast(info_t *);
 
-/* toem_builtin1.c */
-int _myhistory(info_t *);
-int _myalias(info_t *);
+/* toem_get_inbuilt1.c */
+int _myhist(info_t *);
+int _myaka(info_t *);
 
 /*toem_getline.c */
 ssize_t get_input(info_t *);
@@ -211,19 +214,19 @@ int read_history(info_t *info);
 int build_history_list(info_t *info, char *buf, int linecount);
 int renumber_history(info_t *info);
 
-/* toem_lists.c */
-list_t *add_node(list_t **, const char *, int);
-list_t *add_node_end(list_t **, const char *, int);
-size_t print_list_str(const list_t *);
-int delete_node_at_index(list_t **, unsigned int);
-void free_list(list_t **);
+/* toem_aux_lists.c */
+list_t *inc_node(list_t **, const char *, int);
+list_t *inc_node_end(list_t **, const char *, int);
+size_t write_list_str(const list_t *);
+int del_node_index(list_t **, unsigned int);
+void emp_list(list_t **);
 
-/* toem_lists1.c */
-size_t list_len(const list_t *);
-char **list_to_strings(list_t *);
-size_t print_list(const list_t *);
-list_t *node_starts_with(list_t *, char *, char);
-ssize_t get_node_index(list_t *, list_t *);
+/* toem_aux_lists1.c */
+size_t len_list(const list_t *);
+char **list_to_str(list_t *);
+size_t write_list(const list_t *);
+list_t *node_begins_with(list_t *, char *, char);
+ssize_t get_node_idx(list_t *, list_t *);
 
 /* toem_vars.c */
 int is_chain(info_t *, char *, size_t *);
