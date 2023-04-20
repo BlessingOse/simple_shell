@@ -53,7 +53,7 @@ int hsh(info_t *info, char **av)
 }
 
 /**
- * find_builtin - searches a builtin command
+ * look_builtin - searches a builtin command
  * @info: the parameter & return info struct
  *
  * Return: -1 if builtin not found,
@@ -62,7 +62,7 @@ int hsh(info_t *info, char **av)
  *-2 if builtin signals exit()
  */
 
-int find_builtin(info_t *info)
+int look_builtin(info_t *info)
 {
 	int n, built_in_ret = -1;
 	builtin_table builtintbl[] = {
@@ -90,13 +90,13 @@ int find_builtin(info_t *info)
 }
 
 /**
- * find_cmd - find command in PATH
+ * search_cmd - find command in PATH
  * @info: the parameter & return info struct
  *
  * Return: void
  */
 
-void find_cmd(info_t *info)
+void search_cmd(info_t *info)
 {
 	char *path = NULL;
 	int n, x;
@@ -139,13 +139,13 @@ void find_cmd(info_t *info)
 }
 
 /**
- * fork_cmd - forks a an exec thread to run cmd
+ * forkk_cmd - forks a an exec thread to run cmd
  * @info: the parameter & return info struct
  *
  * Return: void
  */
 
-void fork_cmd(info_t *info)
+void forkk_cmd(info_t *info)
 {
 	pid_t child_pid;
 

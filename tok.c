@@ -1,14 +1,14 @@
 #include "sh.h"
 
 /**
- * **strtow - string into words.
+ * **_strtow1 - string into words.
  * @str: string
  * @d: delimeter string
  *
  * Return: a pointer to an array of strings, or NULL on failure
  */
 
-char **strtow(char *str, char *d)
+char **_strtow1(char *str, char *d)
 {
 	char **s;
 	int a, b, c, x, numwords = 0;
@@ -52,14 +52,14 @@ char **strtow(char *str, char *d)
 }
 
 /**
- * **strtow2 - string into words
+ * **_strtow2 - string into words
  * @str: string
  * @d: the delimeter
  *
  * Return: a pointer to an array of strings, or NULL on failure
  */
 
-char **strtow2(char *str, char d)
+char **_strtow2(char *str, char d)
 {
 	char **s;
 	int a, b, c, x, numwords = 0;

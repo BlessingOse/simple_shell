@@ -1,14 +1,14 @@
 #include "sh.h"
 
 /**
- * is_cmd - determines if a file is an executable command
+ * exe_cmd - determines if a file is an executable command
  * @info: the info struct
  * @path: path to the file
  *
  * Return: 1 if true, 0 otherwise
  */
 
-int is_cmd(info_t *info, char *path)
+int exe_cmd(info_t *info, char *path)
 {
 	struct stat st;
 
@@ -21,7 +21,7 @@ int is_cmd(info_t *info, char *path)
 }
 
 /**
- * dup_chars - duplicates characters
+ * dupl_chars - duplicates characters
  * @pathstr: PATH string
  * @start: start index
  * @stop: stop index
@@ -29,7 +29,7 @@ int is_cmd(info_t *info, char *path)
  * Return: pointer to new buffer
  */
 
-char *dup_chars(char *pathstr, int start, int stop)
+char *dupl_chars(char *pathstr, int start, int stop)
 {
 	static char buf[1024];
 	int n = 0, x = 0;
@@ -42,7 +42,7 @@ char *dup_chars(char *pathstr, int start, int stop)
 }
 
 /**
- * find_path - finds this cmd in the PATH string
+ * look_path - finds this cmd in the PATH string
  * @info: the info struct
  * @pathstr: string PATH
  * @cmd: the cmd to find
@@ -50,7 +50,7 @@ char *dup_chars(char *pathstr, int start, int stop)
  * Return: full path of cmd if found or NULL
  */
 
-char *find_path(info_t *info, char *pathstr, char *cmd)
+char *look_path(info_t *info, char *pathstr, char *cmd)
 {
 	int n = 0, curr_pos = 0;
 	char *path;
