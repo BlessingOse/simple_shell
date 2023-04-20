@@ -1,13 +1,13 @@
 #include "sh.h"
 
 /**
- * _lenstr - length of a string
+ * _strlen - length of a string
  * @s: string
  *
  * Return: integer length of string
  */
 
-int _lenstr(char *s)
+int _strlen(char *s)
 {
 	int n = 0;
 
@@ -24,14 +24,14 @@ int _lenstr(char *s)
 }
 
 /**
- * _cmpstr - compares two strings
+ * _strcmp - compares two strings
  * @s1: string one
  * @s2: string two
  *
  * Return: negative if s1 < s2, positive if s1 > s2, zero if s1 == s2
  */
 
-int _cmpstr(char *s1, char *s2)
+int _strcmp(char *s1, char *s2)
 {
 	while (*s1 && *s2)
 	{
@@ -73,14 +73,14 @@ char *begins_with(const char *haystack, const char *needle)
 }
 
 /**
- * _catstr - concatenates two strings
+ * _strcat - concatenates two strings
  * @dest: the destination buffer
  * @src: the source buffer
  *
  * Return: pointer to destination buffer
  */
 
-char *_catstr(char *dest, char *src)
+char *_strcat(char *dest, char *src)
 {
 	char *ret = dest;
 

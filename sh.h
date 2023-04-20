@@ -43,7 +43,6 @@ extern char **environ;
  * @str: a string
  * @next: points to the next node
  */
-
 typedef struct liststr
 {
 	int num;
@@ -73,7 +72,6 @@ typedef struct liststr
  *@readfd: the fd from which to read line input
  *@histcount: the history line number count
  */
-
 typedef struct passinfo
 {
 	char *arg;
@@ -116,14 +114,14 @@ typedef struct builtin
 
 /* toem_loop_sh.c */
 int hsh(info_t *, char **);
-int look_builtin(info_t *);
-void search_cmd(info_t *);
-void forkk_cmd(info_t *);
+int find_builtin(info_t *);
+void find_cmd(info_t *);
+void fork_cmd(info_t *);
 
 /* toem_pars.c */
-int exe_cmd(info_t *, char *);
-char *dupl_chars(char *, int, int);
-char *look_path(info_t *, char *, char *);
+int is_cmd(info_t *, char *);
+char *dup_chars(char *, int, int);
+char *find_path(info_t *, char *, char *);
 
 /* loophsh.c */
 int loophsh(char **);
@@ -135,14 +133,14 @@ int _putfd(char c, int fd);
 int _putsfd(char *str, int fd);
 
 /* toem_strg.c */
-int _lenstr(char *);
-int _cmpstr(char *, char *);
+int _strlen(char *);
+int _strcmp(char *, char *);
 char *begins_with(const char *, const char *);
-char *_catstr(char *, char *);
+char *_strcat(char *, char *);
 
 /* toem_strg1.c */
-char *_cpystr(char *, char *);
-char *_dupstr(const char *);
+char *_strcpy(char *, char *);
+char *_strdup(const char *);
 void _puts(char *);
 int _putchar(char);
 
@@ -152,22 +150,22 @@ char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
 
 /* toem_tok.c */
-char **_strtow1(char *, char *);
-char **_strtow2(char *, char);
+char **strtow1(char *, char *);
+char **strtow2(char *, char);
 
 /* toem_reallot.c */
-char *_memsett(char *, char, unsigned int);
+char *_memset(char *, char, unsigned int);
 void empt(char **);
-void *_reallot(void *, unsigned int, unsigned int);
+void *_realloc(void *, unsigned int, unsigned int);
 
 /* toem_memory.c */
 int bfree(void **);
 
 /* toem_atoii.c */
 int flexible(info_t *);
-int is_deli(char, char *);
-int _isalphab(int);
-int _atoii(char *);
+int is_delim(char, char *);
+int _isalpha(int);
+int _atoi(char *);
 
 /* toem_errors1.c */
 int _erratoi(char *);
@@ -177,13 +175,13 @@ char *convert_number(long int, int, int);
 void remove_comments(char *);
 
 /* toem_get_inbuilt.c */
-int _myext(info_t *);
-int _mycurdir(info_t *);
-int _myast(info_t *);
+int _myexit(info_t *);
+int _mycd(info_t *);
+int _myhelp(info_t *);
 
 /* toem_get_inbuilt1.c */
-int _myhist(info_t *);
-int _myaka(info_t *);
+int _myhistory(info_t *);
+int _myalias(info_t *);
 
 /*toem_getline.c */
 ssize_t get_input(info_t *);
@@ -219,14 +217,14 @@ list_t *inc_node(list_t **, const char *, int);
 list_t *inc_node_end(list_t **, const char *, int);
 size_t write_list_str(const list_t *);
 int del_node_index(list_t **, unsigned int);
-void emp_list(list_t **);
+void free_list(list_t **);
 
 /* toem_aux_lists1.c */
 size_t len_list(const list_t *);
-char **list_to_str(list_t *);
+char **list_to_strings(list_t *);
 size_t write_list(const list_t *);
 list_t *node_begins_with(list_t *, char *, char);
-ssize_t get_node_idx(list_t *, list_t *);
+ssize_t get_node_index(list_t *, list_t *);
 
 /* toem_vars.c */
 int is_chain(info_t *, char *, size_t *);

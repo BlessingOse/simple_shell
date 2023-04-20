@@ -1,14 +1,14 @@
 #include "sh.h"
 
 /**
- * _cpystr - string copy
+ * _strcpy - string copy
  * @dest: destination
  * @src: the source
  *
  * Return: pointer to destination
  */
 
-char *_cpystr(char *dest, char *src)
+char *_strcpy(char *dest, char *src)
 {
 	int n = 0;
 
@@ -26,13 +26,13 @@ char *_cpystr(char *dest, char *src)
 }
 
 /**
- * _dupstr - string duplicate
+ * _strdup - string duplicate
  * @str: string to be duplicated
  *
  * Return: pointer to the duplicated string
  */
 
-char *_dupstr(const char *str)
+char *_strdup(const char *str)
 {
 	int length = 0;
 	char *ret;

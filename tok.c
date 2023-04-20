@@ -1,14 +1,14 @@
 #include "sh.h"
 
 /**
- * **_strtow1 - string into words.
+ * **strtow1 - string into words.
  * @str: string
  * @d: delimeter string
  *
  * Return: a pointer to an array of strings, or NULL on failure
  */
 
-char **_strtow1(char *str, char *d)
+char **strtow1(char *str, char *d)
 {
 	char **s;
 	int a, b, c, x, numwords = 0;
@@ -16,9 +16,7 @@ char **_strtow1(char *str, char *d)
 	if (str == NULL || str[0] == 0)
 		return (NULL);
 	if (!d)
-	{
 		d = " ";
-	}
 	for (a = 0; str[a] != '\0'; a++)
 	{
 		if (!is_delim(str[a], d) && (is_delim(str[a + 1], d) || !str[a + 1]))
@@ -39,10 +37,12 @@ char **_strtow1(char *str, char *d)
 			c++;
 		s[b] = malloc((c + 1) * sizeof(char));
 		if (!s[b])
+		{
 			for (c = 0; c < b; c++)
 				free(s[c]);
 			free(s);
 			return (NULL);
+		}
 		for (x = 0; x < c; x++)
 			s[b][x] = str[a++];
 		s[b][x] = 0;
@@ -52,14 +52,14 @@ char **_strtow1(char *str, char *d)
 }
 
 /**
- * **_strtow2 - string into words
+ * **strtow2 - string into words
  * @str: string
  * @d: the delimeter
  *
  * Return: a pointer to an array of strings, or NULL on failure
  */
 
-char **_strtow2(char *str, char d)
+char **strtow2(char *str, char d)
 {
 	char **s;
 	int a, b, c, x, numwords = 0;

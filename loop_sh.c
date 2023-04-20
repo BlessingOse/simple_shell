@@ -16,7 +16,7 @@ int hsh(info_t *info, char **av)
 	while (r != -1 && builtin_ret != -2)
 	{
 		clear_info(info);
-		if (interactive(info))
+		if (flexible(info))
 		{
 			_puts("$ ");
 		}
@@ -31,7 +31,7 @@ int hsh(info_t *info, char **av)
 				find_cmd(info);
 			}
 		}
-		else if (interactive(info))
+		else if (flexible(info))
 		{
 			_putchar('\n');
 		}
@@ -39,7 +39,7 @@ int hsh(info_t *info, char **av)
 	}
 	write_history(info);
 	free_info(info, 1);
-	if (!interactive(info) && info->status)
+	if (!flexible(info) && info->status)
 	{
 		exit(info->status);
 	}
@@ -53,7 +53,7 @@ int hsh(info_t *info, char **av)
 }
 
 /**
- * look_builtin - searches a builtin command
+ * find_builtin - searches a builtin command
  * @info: the parameter & return info struct
  *
  * Return: -1 if builtin not found,
@@ -90,13 +90,13 @@ int look_builtin(info_t *info)
 }
 
 /**
- * search_cmd - find command in PATH
+ * find_cmd - find command in PATH
  * @info: the parameter & return info struct
  *
  * Return: void
  */
 
-void search_cmd(info_t *info)
+void find_cmd(info_t *info)
 {
 	char *path = NULL;
 	int n, x;
@@ -127,7 +127,7 @@ void search_cmd(info_t *info)
 	}
 	else
 	{
-		if ((interactive(info) || _getenv(info, "PATH=")
+		if ((flexible(info) || _getenv(info, "PATH=")
 			|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
 			fork_cmd(info);
 		else if (*(info->arg) != '\n')
@@ -139,13 +139,13 @@ void search_cmd(info_t *info)
 }
 
 /**
- * forkk_cmd - forks a an exec thread to run cmd
+ * fork_cmd - forks a an exec thread to run cmd
  * @info: the parameter & return info struct
  *
  * Return: void
  */
 
-void forkk_cmd(info_t *info)
+void fork_cmd(info_t *info)
 {
 	pid_t child_pid;
 

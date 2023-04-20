@@ -13,17 +13,17 @@ int flexible(info_t *info)
 }
 
 /**
- * is_deli - to check if character is a deli
+ * is_delim - to check if character is a deli
  * @c: the char to check
- * @deli: the deli string
+ * @delim: the deli string
  *
  * Return: 1 if true, 0 if false
  */
 
-int is_deli(char c, char *deli)
+int is_delim(char c, char *delim)
 {
-	while (*deli)
-		if (*deli++ == c)
+	while (*delim)
+		if (*delim++ == c)
 		{
 			return (1);
 		}
@@ -31,13 +31,13 @@ int is_deli(char c, char *deli)
 }
 
 /**
- *_isalphab - to check for alphabetic character
+ *_isalpha - to check for alphabetic character
  *@c: character to input
  *
  *Return: 1 if c is alphabetic, 0 otherwise
  */
 
-int _isalphab(int c)
+int _isalpha(int c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 	{
@@ -50,13 +50,13 @@ int _isalphab(int c)
 }
 
 /**
- *_atoii - converts a string to an integer
+ *_atoi - converts a string to an integer
  *@s: the string to be converted
  *
  *Return: 0 if no numbers in string, converted number otherwise
  */
 
-int _atoii(char *s)
+int _atoi(char *s)
 {
 	int n, sign = 1, flag = 0, output;
 	unsigned int result = 0;
@@ -91,4 +91,3 @@ int _atoii(char *s)
 
 	return (output);
 }
-
