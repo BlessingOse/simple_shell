@@ -159,7 +159,7 @@ void empt(char **);
 void *_realloc(void *, unsigned int, unsigned int);
 
 /* toem_memory.c */
-int bfree(void **);
+int dfree(void **);
 
 /* toem_atoii.c */
 int flexible(info_t *);
