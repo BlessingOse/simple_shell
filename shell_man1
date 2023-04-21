@@ -1,0 +1,48 @@
+.\"Created by Jeremiah Agbita and Blessing Mary Abhasibhewere
+
+.TH man 1 "APRIL 2023" "0.1" "simple_shell man page"
+
+.SH NAME
+.B simple_shell
+- Simple shell created in C to interact with a linux operating system.
+
+.SH SYNOPSIS
+ hsh [options] [file]
+
+.SH DESCRIPTION
+Shell is a UNIX term for the interactive user interface with an operating system. The shell is the layer of programming that understands
+and executes the commands a user enters. In some systems, the shell is called a command interpreter. A shell usually implies an interface
+with a command syntax 
+
+.B Overview
+
+The Simple shell just like the UNIX shell is a command-line interpreter or shell that provides a command line user interface for operating systems. The shell is both an interactive command language and a scripting language, and is used by the operating system to control the execution of the system using shell scripts.
+.SH Return Value
+
+Always 0 for success, other number means failure.
+
+.SH PATH
+
+It will look inside all directions in PATH env variable for executable.
+
+.SH
+
+.SH OPTIONS
+.B simple_shell
+Command options will be typed after the main command followed by a space and a
+ '-' symbol.
+
+
+.SH EXAMPLE
+
+[command] [options]
+$ ls -l
+
+.SH BUGS
+Single space required after argument.
+
+
+.SH CONTRIBUTORS
+JEREMIAH AGBITA, BLESSING MARY ABHASIBHEWERE.
+.SH COPYRIGHT
+soda is Copyright (C) 2023 by Jermiah Agbita and Blessing Mary Abhasibhewere.
