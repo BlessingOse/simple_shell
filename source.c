@@ -45,7 +45,7 @@ int read_source(info_t *info)
 	free(buf);
 	info->histcount = linecount;
 	while (info->histcount-- >= HIST_MAX)
-		del_node_index(&(info->source), 0);
+		del_node_index(&(info->history), 0);
 	renumber_source(info);
 	return (info->histcount);
 }
@@ -63,15 +63,15 @@ int build_source_list(info_t *info, char *buf, int linecount)
 {
 	list_t *node = NULL;
 
-	if (info->source)
+	if (info->history)
 	{
-		node = info->source;
+		node = info->history;
 	}
 	inc_node_end(&node, buf, linecount);
 
-	if (!info->source)
+	if (!info->history)
 	{
-		info->source = node;
+		info->history = node;
 	}
 	return (0);
 }
@@ -100,7 +100,7 @@ int write_source(info_t *info)
 	{
 		return (-1);
 	}
-	for (node = info->source; node; node = node->next)
+	for (node = info->history; node; node = node->next)
 	{
 		_putsfd(node->str, fd);
 		_putfd('\n', fd);
@@ -147,7 +147,7 @@ char *get_source_file(info_t *info)
 
 int renumber_source(info_t *info)
 {
-	list_t *node = info->source;
+	list_t *node = info->history;
 	int n = 0;
 
 	while (node)

@@ -38,7 +38,7 @@ void _eputs(char *str)
 	{
 		return;
 	}
-	while (str[i] != '\0')
+	while (str[n] != '\0')
 	{
 		_eputchar(str[n]);
 		n++;

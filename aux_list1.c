@@ -72,7 +72,7 @@ size_t write_list(const list_t *h)
 
 	while (h)
 	{
-		_puts(convert_number(h->num, 10, 0));
+		_puts(turn_number(h->num, 10, 0));
 		_putchar(':');
 		_putchar(' ');
 		_puts(h->str ? h->str : "(nil)");

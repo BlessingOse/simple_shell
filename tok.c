@@ -52,14 +52,14 @@ char **strtow1(char *str, char *d)
 }
 
 /**
- * **strtow2 - string into words
+ * **strtow - string into words
  * @str: string
  * @d: the delimeter
  *
  * Return: a pointer to an array of strings, or NULL on failure
  */
 
-char **strtow2(char *str, char d)
+char **strtow(char *str, char d)
 {
 	char **s;
 	int a, b, c, x, numwords = 0;

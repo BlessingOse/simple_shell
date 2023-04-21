@@ -1,6 +1,50 @@
 #include "sh.h"
 
 /**
+ * input_buf - buffers chained commands
+ * @info: parameter struct
+ * @buf: address of buffer
+ * @len: address of len var
+ *
+ * Return: bytes read
+ */
+
+ssize_t input_buf(info_t *info, char **buf, size_t *len)
+{
+        ssize_t r = 0;
+        size_t len_p = 0;
+
+        if (!*len)
+        {
+                free(*buf);
+                *buf = NULL;
+                signal(SIGINT, sigintHandler);
+#if USE_GETLINE
+                r = getline(buf, &len_p, stdin);
+#else
+                r = _getline(info, buf, &len_p);
+#endif
+                if (r > 0)
+                {
+                        if ((*buf)[r - 1] == '\n')
+                        {
+                                (*buf)[r - 1] = '\0'; /* remove trailing newline */
+                                r--;
+                        }
+                        info->linecount_flag = 1;
+                        delete_comments(*buf);
+                        build_source_list(info, *buf, info->histcount++);
+                        /* if (_strchr(*buf, ';')) is this a command chain? */
+                        {
+                                *len = r;
+                                info->cmd_buf = buf;
+                        }
+                }
+        }
+	return (r);
+}
+
+/**
  * get_inp - gets a line minus the newline
  * @info: parameter struct
  *
@@ -23,7 +67,7 @@ ssize_t get_inp(info_t *info)
 		x = n;
 		p = buf + n;
 
-		check_chain(info, buf, &x, n, len);
+		confirm_chain(info, buf, &x, n, len);
 		while (n < len)
 		{
 			if (is_chain(info, buf, &x))
@@ -71,49 +115,6 @@ ssize_t read_buf(info_t *info, char *buf, size_t *i)
 	return (r);
 }
 
-/**
- * input_buf - buffers chained commands
- * @info: parameter struct
- * @buf: address of buffer
- * @len: address of len var
- *
- * Return: bytes read
- */
-
-ssize_t input_buf(info_t *info, char **buf, size_t *len)
-{
-	ssize_t r = 0;
-	size_t len_p = 0;
-
-	if (!*len)
-	{
-		free(*buf);
-		*buf = NULL;
-		signal(SIGINT, sigintHandler);
-#if USE_GETLINE
-		r = getline(buf, &len_p, stdin);
-#else
-		r = _getline(info, buf, &len_p);
-#endif
-		if (r > 0)
-		{
-			if ((*buf)[r - 1] == '\n')
-			{
-				(*buf)[r - 1] = '\0'; /* remove trailing newline */
-				r--;
-			}
-			info->linecount_flag = 1;
-			remove_comments(*buf);
-			build_history_list(info, *buf, info->histcount++);
-			/* if (_strchr(*buf, ';')) is this a command chain? */
-			{
-				*len = r;
-				info->cmd_buf = buf;
-			}
-		}
-	}
-	return (r);
-}
 
 /**
  * _getline - gets the next line of input from STDIN
@@ -151,9 +152,9 @@ int _getline(info_t *info, char **ptr, size_t *length)
 		return (p ? free(p), -1 : -1);
 
 	if (s)
-		_strncat(new_p, buf + i, k - i);
+		_strncat(new_p, buf + n, x - n);
 	else
-		_strncpy(new_p, buf + i, k - i + 1);
+		_strncpy(new_p, buf + n, x - n + 1);
 
 	s = s + x - n;
 	n = x;

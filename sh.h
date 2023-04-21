@@ -151,14 +151,14 @@ char *_strchr(char *, char);
 
 /* toem_tok.c */
 char **strtow1(char *, char *);
-char **strtow2(char *, char);
+char **strtow(char *, char);
 
 /* toem_reallot.c */
 char *_memset(char *, char, unsigned int);
 void empt(char **);
 void *_realloc(void *, unsigned int, unsigned int);
 
-/* toem_memory.c */
+/* toem_disk.c */
 int dfree(void **);
 
 /* toem_atoii.c */
@@ -183,7 +183,9 @@ int _myhelp(info_t *);
 int _myhistory(info_t *);
 int _myalias(info_t *);
 
-/*toem_line.c */
+/*toem_line.c
+ssize_t read_buf(info_t *info, char *buf, size_t *i);
+ssize_t input_buf(info_t *info, char **buf, size_t *len);*/
 ssize_t get_inp(info_t *);
 int _getline(info_t *, char **, size_t *);
 void sigintHandler(int);
@@ -200,12 +202,12 @@ int _mysetenv(info_t *);
 int _myunsetenv(info_t *);
 int expand_env_list(info_t *);
 
-/* toem_getenv.c */
-char **get_environ(info_t *);
+/* toem_sh_env.c */
+char **fetch_environ(info_t *);
 int _unsetenv(info_t *, char *);
 int _setenv(info_t *, char *, char *);
 
-/* toem_history.c */
+/* toem_source.c */
 char *get_source_file(info_t *info);
 int write_source(info_t *info);
 int read_source(info_t *info);

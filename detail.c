@@ -1,4 +1,52 @@
-#include "shell.h"
+#include "sh.h"
+
+/**
+ * del_info - clears info_t struct
+ * @info: struct address
+ */
+
+void del_info(info_t *info)
+{
+        info->arg = NULL;
+        info->argv = NULL;
+        info->path = NULL;
+        info->argc = 0;
+}
+
+/**
+ * init_info - initializes info_t struct
+ * @info: struct address
+ * @av: argument vector
+ */
+
+void init_info(info_t *info, char **av)
+{
+        int n = 0;
+
+        info->fname = av[0];
+        if (info->arg)
+        {
+                info->argv = strtow1(info->arg, " \t");
+                if (!info->argv)
+                {
+
+                        info->argv = malloc(sizeof(char *) * 2);
+                        if (info->argv)
+                        {
+                                info->argv[0] = _strdup(info->arg);
+                                info->argv[1] = NULL;
+                        }
+                }
+                for (n = 0; info->argv && info->argv[n]; n++)
+                {
+                        ;
+                }
+                info->argc = n;
+
+                restore_alias(info);
+                restore_vars(info);
+        }
+}
 
 /**
  * free_info - frees info_t struct fields
@@ -8,7 +56,7 @@
 
 void free_info(info_t *info, int all)
 {
-	ffree(info->argv);
+	empt(info->argv);
 	info->argv = NULL;
 	info->path = NULL;
 	if (all)
@@ -29,61 +77,13 @@ void free_info(info_t *info, int all)
 		{
 			free_list(&(info->alias));
 		}
-		ffree(info->environ);
+		empt(info->environ);
 			info->environ = NULL;
-		bfree((void **)info->cmd_buf);
+		dfree((void **)info->cmd_buf);
 		if (info->readfd > 2)
 		{
 			close(info->readfd);
 		}
 		_putchar(BUF_FLUSH);
-	}
-}
-
-/**
- * del_info - clears info_t struct
- * @info: struct address
- */
-
-void del_info(info_t *info)
-{
-	info->arg = NULL;
-	info->argv = NULL;
-	info->path = NULL;
-	info->argc = 0;
-}
-
-/**
- * init_info - initializes info_t struct
- * @info: struct address
- * @av: argument vector
- */
-
-void init_info(info_t *info, char **av)
-{
-	int n = 0;
-
-	info->fname = av[0];
-	if (info->arg)
-	{
-		info->argv = strtow(info->arg, " \t");
-		if (!info->argv)
-		{
-
-			info->argv = malloc(sizeof(char *) * 2);
-			if (info->argv)
-			{
-				info->argv[0] = _strdup(info->arg);
-				info->argv[1] = NULL;
-			}
-		}
-		for (n = 0; info->argv && info->argv[n]; n++)
-		{
-			;
-		}
-		info->argc = n;
-
-		replace_alias(info);
-		replace_vars(info);
 	}
 }

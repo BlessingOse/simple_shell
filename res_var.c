@@ -93,13 +93,13 @@ int restore_vars(info_t *info)
 		if (!_strcmp(info->argv[n], "$?"))
 		{
 			restore_string(&(info->argv[n]),
-				_strdup(convert_number(info->status, 10, 0)));
+				_strdup(turn_number(info->status, 10, 0)));
 			continue;
 		}
 		if (!_strcmp(info->argv[n], "$$"))
 		{
 			restore_string(&(info->argv[n]),
-				_strdup(convert_number(getpid(), 10, 0)));
+				_strdup(turn_number(getpid(), 10, 0)));
 			continue;
 		}
 		node = node_begins_with(info->env, &info->argv[n][1], '=');

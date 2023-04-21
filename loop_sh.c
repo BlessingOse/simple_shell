@@ -15,16 +15,16 @@ int hsh(info_t *info, char **av)
 
 	while (r != -1 && builtin_ret != -2)
 	{
-		clear_info(info);
+		del_info(info);
 		if (flexible(info))
 		{
 			_puts("$ ");
 		}
 		_eputchar(BUF_FLUSH);
-		r = get_input(info);
+		r = get_inp(info);
 		if (r != -1)
 		{
-			set_info(info, av);
+			init_info(info, av);
 			builtin_ret = find_builtin(info);
 			if (builtin_ret == -1)
 			{
@@ -37,7 +37,7 @@ int hsh(info_t *info, char **av)
 		}
 		free_info(info, 0);
 	}
-	write_history(info);
+	write_source(info);
 	free_info(info, 1);
 	if (!flexible(info) && info->status)
 	{
@@ -133,7 +133,7 @@ void find_cmd(info_t *info)
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;
-			print_error(info, "not found\n");
+			display_err(info, "not found\n");
 		}
 	}
 }
@@ -158,7 +158,7 @@ void fork_cmd(info_t *info)
 	}
 	if (child_pid == 0)
 	{
-		if (execve(info->path, info->argv, get_environ(info)) == -1)
+		if (execve(info->path, info->argv, fetch_environ(info)) == -1)
 		{
 			free_info(info, 1);
 			if (errno == EACCES)
@@ -175,7 +175,7 @@ void fork_cmd(info_t *info)
 			info->status = WEXITSTATUS(info->status);
 			if (info->status == 126)
 			{
-				print_error(info, "Permission denied\n");
+				display_err(info, "Permission denied\n");
 			}
 		}
 	}

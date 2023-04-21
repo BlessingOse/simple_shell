@@ -46,6 +46,7 @@ char *_strncpy(char *dest, char *src, int n)
 	char *s = dest;
 
 	p = 0;
+	x = 0;
 	while (src[p] != '\0' && x < n - 1)
 	{
 		dest[p] = src[p];
