@@ -25,10 +25,10 @@ int hsh(info_t *info, char **av)
 		if (r != -1)
 		{
 			init_info(info, av);
-			builtin_ret = find_builtin(info);
+			builtin_ret = look_builtin(info);
 			if (builtin_ret == -1)
 			{
-				find_cmd(info);
+				look_cmd(info);
 			}
 		}
 		else if (flexible(info))
@@ -53,7 +53,7 @@ int hsh(info_t *info, char **av)
 }
 
 /**
- * find_builtin - searches a builtin command
+ * look_builtin - searches a builtin command
  * @info: the parameter & return info struct
  *
  * Return: -1 if builtin not found,
@@ -90,13 +90,13 @@ int look_builtin(info_t *info)
 }
 
 /**
- * find_cmd - find command in PATH
+ * look_cmd - find command in PATH
  * @info: the parameter & return info struct
  *
  * Return: void
  */
 
-void find_cmd(info_t *info)
+void look_cmd(info_t *info)
 {
 	char *path = NULL;
 	int n, x;
