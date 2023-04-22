@@ -1,4 +1,4 @@
-#include "sh.h"
+#include "she.h"
 
 /**
  * freeDataFxn - frees data structure
