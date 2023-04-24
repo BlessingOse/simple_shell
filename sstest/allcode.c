@@ -21,15 +21,15 @@ void freeDataFxn(data_shell *datash)
 }
 
 /**
- * set_data - Initialize data structure
+ * init_data - Initialize data structure
  *
  * @datash: data structure
  * @av: argument vector
  * Return: no return
  */
-void set_data(data_shell *datash, char **av)
+void init_data(data_shell *datash, char **av)
 {
-	unsigned int i;
+	unsigned int m;
 
 	datash->av = av;
 	datash->input = NULL;
@@ -37,18 +37,18 @@ void set_data(data_shell *datash, char **av)
 	datash->status = 0;
 	datash->counter = 1;
 
-	for (i = 0; environ[i]; i++)
+	for (m = 0; environ[m]; m++)
 		;
 
-	datash->_environ = malloc(sizeof(char *) * (i + 1));
+	datash->_environ = malloc(sizeof(char *) * (m + 1));
 
-	for (i = 0; environ[i]; i++)
+	for (m = 0; environ[m]; m++)
 	{
-		datash->_environ[i] = _strdup(environ[i]);
+		datash->_environ[m] = _strdup(environ[m]);
 	}
 
-	datash->_environ[i] = NULL;
-	datash->pid = aux_itoa(getpid());
+	datash->_environ[m] = NULL;
+	datash->pid = aut_itoa(getpid());
 }
 
 
@@ -76,9 +76,9 @@ int main(int ac, char **av)
 	(void) ac;
 
 	signal(SIGINT, get_sigint);
-	set_data(&datash, av);
+	init_data(&datash, av);
 	shell_loop(&datash);
-	free_data(&datash);
+	freeDataFxn(&datash);
 	if (datash.status < 0)
 		return (255);
 	return (datash.status);
@@ -94,7 +94,7 @@ int main(int ac, char **av)
 
 
 /**
- * strcat_cd - function that concatenates the message for cd error
+ * strCat_cdir - function that concatenates the message for cd error
  *
  * @datash: data relevant (directory)
  * @msg: message to print
@@ -102,7 +102,8 @@ int main(int ac, char **av)
  * @ver_str: counter lines
  * Return: error message
  */
-char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
+
+char *strCat_cdir(data_shell *datash, char *msg, char *error, char *ver_str)
 {
 	char *illegal_flag;
 
@@ -138,16 +139,17 @@ char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
 
 
 /**
- * error_get_cd - error message for cd command in get_cd
+ * err_getCdir - error message for cd command in get_cd
  * @datash: data relevant (directory)
  * Return: Error message
  */
-char *error_get_cd(data_shell *datash)
+
+char *err_getCdir(data_shell *datash)
 {
 	int length, len_id;
 	char *error, *ver_str, *msg;
 
-	ver_str = aux_itoa(datash->counter);
+	ver_str = aut_itoa(datash->counter);
 	if (datash->args[1][0] == '-')
 	{
 		msg = ": Illegal option ";
@@ -169,7 +171,7 @@ char *error_get_cd(data_shell *datash)
 		return (NULL);
 	}
 
-	error = strcat_cd(datash, msg, error, ver_str);
+	error = strCat_cdir(datash, msg, error, ver_str);
 
 	free(ver_str);
 
@@ -177,17 +179,18 @@ char *error_get_cd(data_shell *datash)
 }
 
 /**
- * error_not_found - generic error message for command not found
+ * err_missing - generic error message for command not found
  * @datash: data relevant (counter, arguments)
  * Return: Error message
  */
-char *error_not_found(data_shell *datash)
+
+char *err_missing(data_shell *datash)
 {
 	int length;
 	char *error;
 	char *ver_str;
 
-	ver_str = aux_itoa(datash->counter);
+	ver_str = aut_itoa(datash->counter);
 	length = _strlen(datash->av[0]) + _strlen(ver_str);
 	length += _strlen(datash->args[0]) + 16;
 	error = malloc(sizeof(char) * (length + 1));
@@ -209,18 +212,19 @@ char *error_not_found(data_shell *datash)
 }
 
 /**
- * error_exit_shell - generic error message for exit in get_exit
+ * err_EXT_sh - generic error message for exit in get_exit
  * @datash: data relevant (counter, arguments)
  *
  * Return: Error message
  */
-char *error_exit_shell(data_shell *datash)
+
+char *err_EXT_sh(data_shell *datash)
 {
 	int length;
 	char *error;
 	char *ver_str;
 
-	ver_str = aux_itoa(datash->counter);
+	ver_str = aut_itoa(datash->counter);
 	length = _strlen(datash->av[0]) + _strlen(ver_str);
 	length += _strlen(datash->args[0]) + _strlen(datash->args[1]) + 23;
 	error = malloc(sizeof(char) * (length + 1));
@@ -243,18 +247,19 @@ char *error_exit_shell(data_shell *datash)
 }
 
 /**
- * error_env - error message for env in get_env.
+ * err_env_msg - error message for env in get_env.
  * @datash: data relevant (counter, arguments)
  * Return: error message.
  */
-char *error_env(data_shell *datash)
+
+char *err_env_msg(data_shell *datash)
 {
 	int length;
 	char *error;
 	char *ver_str;
 	char *msg;
 
-	ver_str = aux_itoa(datash->counter);
+	ver_str = aut_itoa(datash->counter);
 	msg = ": Unable to add/remove from environment\n";
 	length = _strlen(datash->av[0]) + _strlen(ver_str);
 	length += _strlen(datash->args[0]) + _strlen(msg) + 4;
@@ -277,19 +282,22 @@ char *error_env(data_shell *datash)
 
 	return (error);
 }
+
+
 /**
- * error_path_126 - error message for path and failure denied permission.
+ * err_RD_126 - error message for path and failure denied permission.
  * @datash: data relevant (counter, arguments).
  *
  * Return: The error string.
  */
-char *error_path_126(data_shell *datash)
+
+char *err_RD_126(data_shell *datash)
 {
 	int length;
 	char *ver_str;
 	char *error;
 
-	ver_str = aux_itoa(datash->counter);
+	ver_str = aut_itoa(datash->counter);
 	length = _strlen(datash->av[0]) + _strlen(ver_str);
 	length += _strlen(datash->args[0]) + 24;
 	error = malloc(sizeof(char) * (length + 1));
@@ -320,10 +328,11 @@ char *error_path_126(data_shell *datash)
 
 
 /**
- * aux_help_env - Help information for the builtin env
+ * aut_asst_env - Help information for the builtin env
  * Return: no return
  */
-void aux_help_env(void)
+
+void aut_asst_env(void)
 {
 	char *help = "env: env [option] [name=value] [command [args]]\n\t";
 
@@ -332,11 +341,14 @@ void aux_help_env(void)
 	write(STDOUT_FILENO, help, _strlen(help));
 
 }
+
+
 /**
- * aux_help_setenv - Help information for the builtin setenv
+ * aut_asst_setenv - Help information for the builtin setenv
  * Return: no return
  */
-void aux_help_setenv(void)
+
+void aut_asst_setenv(void)
 {
 
 	char *help = "setenv: setenv (const char *name, const char *value,";
@@ -347,11 +359,13 @@ void aux_help_setenv(void)
 	help = "Add a new definition to the environment\n";
 	write(STDOUT_FILENO, help, _strlen(help));
 }
+
 /**
- * aux_help_unsetenv - Help information for the builtin unsetenv
+ * aut_asst_unsetenv - Help information for the builtin unsetenv
  * Return: no return
  */
-void aux_help_unsetenv(void)
+
+void aut_asst_unsetenv(void)
 {
 	char *help = "unsetenv: unsetenv (const char *name)\n\t";
 
@@ -362,10 +376,11 @@ void aux_help_unsetenv(void)
 
 
 /**
- * aux_help_general - Entry point for help information for the help builtin
+ * aut_asst_Gen - Entry point for help information for the help builtin
  * Return: no return
  */
-void aux_help_general(void)
+
+void aut_asst_Gen(void)
 {
 	char *help = "^-^ bash, version 1.0(1)-release\n";
 
@@ -383,11 +398,14 @@ void aux_help_general(void)
 	help = "unsetenv [variable]\n";
 	write(STDOUT_FILENO, help, _strlen(help));
 }
+
+
 /**
- * aux_help_exit - Help information fot the builint exit
+ * aut_asst_Ext - Help information fot the builint exit
  * Return: no return
  */
-void aux_help_exit(void)
+
+void aut_asst_Ext(void)
 {
 	char *help = "exit: exit [n]\n Exit shell.\n";
 
@@ -399,10 +417,11 @@ void aux_help_exit(void)
 }
 
 /**
- * aux_help - Help information for the builtin help.
+ * aut_asst - Help information for the builtin help.
  * Return: no return
  */
-void aux_help(void)
+
+void aut_asst(void)
 {
 	char *help = "help: help [-dms] [pattern ...]\n";
 
@@ -412,11 +431,13 @@ void aux_help(void)
 	help = "Displays brief summaries of builtin commands.\n";
 	write(STDOUT_FILENO, help, _strlen(help));
 }
+
 /**
- * aux_help_alias - Help information for the builtin alias.
+ * aut_asst_alias - Help information for the builtin alias.
  * Return: no return
  */
-void aux_help_alias(void)
+
+void aut_asst_alias(void)
 {
 	char *help = "alias: alias [-p] [name[=value]...]\n";
 
@@ -424,11 +445,13 @@ void aux_help_alias(void)
 	help = "\tDefine or display aliases.\n ";
 	write(STDOUT_FILENO, help, _strlen(help));
 }
+
 /**
- * aux_help_cd - Help information for the builtin alias.
+ * aut_asst_CDir - Help information for the builtin alias.
  * Return: no return
  */
-void aux_help_cd(void)
+
+void aut_asst_CDir(void)
 {
 	char *help = "cd: cd [-L|[-P [-e]] [-@]] [dir]\n";
 
@@ -438,14 +461,15 @@ void aux_help_cd(void)
 }
 
 /**
- * aux_itoa - function converts int to string.
+ * aut_itoa - function converts int to string.
  * @n: type int number
  * Return: String.
  */
-char *aux_itoa(int n)
+
+char *aut_itoa(int n)
 {
         unsigned int n1;
-        int lenght = get_len(n);
+        int lenght = fetch_len(n);
         char *buffer;
 
         buffer = malloc(sizeof(char) * (lenght + 1));
@@ -489,13 +513,14 @@ char *aux_itoa(int n)
 
 
 /**
- * add_sep_node_end - adds a separator found at the end
+ * inc_dif_node_extr - adds a separator found at the end
  * of a sep_list.
  * @head: head of the linked list.
  * @sep: separator found (; | &).
  * Return: address of the head.
  */
-sep_list *add_sep_node_end(sep_list **head, char sep)
+
+sep_list *inc_dif_node_extr(sep_list **head, char sep)
 {
 	sep_list *new, *temp;
 
@@ -522,11 +547,12 @@ sep_list *add_sep_node_end(sep_list **head, char sep)
 }
 
 /**
- * free_sep_list - frees a sep_list
+ * empt_dif_list - frees a sep_list
  * @head: head of the linked list.
  * Return: no return.
  */
-void free_sep_list(sep_list **head)
+
+void empt_dif_list(sep_list **head)
 {
 	sep_list *temp;
 	sep_list *curr;
@@ -544,11 +570,12 @@ void free_sep_list(sep_list **head)
 }
 
 /**
- * free_line_list - frees a line_list
+ * empt_LN_list - frees a line_list
  * @head: head of the linked list.
  * Return: no return.
  */
-void free_line_list(line_list **head)
+
+void empt_LN_list(line_list **head)
 {
         line_list *temp;
         line_list *curr;
@@ -566,11 +593,12 @@ void free_line_list(line_list **head)
 }
 
 /**
- * free_rvar_list - frees a r_var list
+ * empt_Rvar_list - frees a r_var list
  * @head: head of the linked list.
  * Return: no return.
  */
-void free_rvar_list(r_var **head)
+
+void empt_Rvar_list(r_var **head)
 {
         r_var *temp;
         r_var *curr;
@@ -614,13 +642,14 @@ void free_rvar_list(r_var **head)
 
 
 /**
- * add_line_node_end - adds a command line at the end
+ * inc_LN_node_extr - adds a command line at the end
  * of a line_list.
  * @head: head of the linked list.
  * @line: command line.
  * Return: address of the head.
  */
-line_list *add_line_node_end(line_list **head, char *line)
+
+line_list *inc_LN_node_extr(line_list **head, char *line)
 {
 	line_list *new, *temp;
 
@@ -647,7 +676,7 @@ line_list *add_line_node_end(line_list **head, char *line)
 }
 
 /**
- * add_rvar_node - adds a variable at the end
+ * inc_Rvar_node - adds a variable at the end
  * of a r_var list.
  * @head: head of the linked list.
  * @lvar: length of the variable.
@@ -655,7 +684,8 @@ line_list *add_line_node_end(line_list **head, char *line)
  * @lval: length of the value.
  * Return: address of the head.
  */
-r_var *add_rvar_node(r_var **head, int lvar, char *val, int lval)
+
+r_var *inc_Rvar_node(r_var **head, int lvar, char *val, int lval)
 {
         r_var *new, *temp;
 
@@ -736,6 +766,7 @@ r_var *add_rvar_node(r_var **head, int lvar, char *val, int lval)
  * if new_size == old_size, returns ptr without changes.
  * if malloc fails, returns NULL.
  */
+
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
 	void *newptr;
@@ -775,6 +806,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
  * if new_size == old_size, returns ptr without changes.
  * if malloc fails, returns NULL.
  */
+
 char **_reallocdp(char **ptr, unsigned int old_size, unsigned int new_size)
 {
 	char **newptr;
@@ -813,11 +845,12 @@ char **_reallocdp(char **ptr, unsigned int old_size, unsigned int new_size)
 
 
 /**
- * get_len - Get the lenght of a number.
+ * fetch_len - Get the lenght of a number.
  * @n: type int number.
  * Return: Lenght of a number.
  */
-int get_len(int n)
+
+int fetch_len(int n)
 {
 	unsigned int n1;
 	int lenght = 1;
@@ -857,6 +890,7 @@ int get_len(int n)
  * @s: input string.
  * Return: integer.
  */
+
 int _atoi(char *s)
 {
 	unsigned int count = 0, size = 0, oi = 0, pn = 1, m = 1, i;
@@ -916,6 +950,7 @@ int _atoi(char *s)
  * @src: const char pointer the source of str
  * Return: the dest
  */
+
 char *_strcat(char *dest, const char *src)
 {
 	int i;
@@ -933,12 +968,14 @@ char *_strcat(char *dest, const char *src)
 	dest[i] = '\0';
 	return (dest);
 }
+
 /**
  * *_strcpy - Copies the string pointed to by src.
  * @dest: Type char pointer the dest of the copied str
  * @src: Type char pointer the source of str
  * Return: the dest.
  */
+
 char *_strcpy(char *dest, char *src)
 {
 
@@ -952,12 +989,14 @@ char *_strcpy(char *dest, char *src)
 
 	return (dest);
 }
+
 /**
  * _strcmp - Function that compares two strings.
  * @s1: type str compared
  * @s2: type str compared
  * Return: Always 0.
  */
+
 int _strcmp(char *s1, char *s2)
 {
 	int i;
@@ -971,12 +1010,14 @@ int _strcmp(char *s1, char *s2)
 		return (-1);
 	return (0);
 }
+
 /**
  * _strchr - locates a character in a string,
  * @s: string.
  * @c: character.
  * Return: the pointer to the first occurrence of the character c.
  */
+
 char *_strchr(char *s, char c)
 {
 	unsigned int i = 0;
@@ -988,12 +1029,14 @@ char *_strchr(char *s, char c)
 		return (s + i);
 	return ('\0');
 }
+
 /**
  * _strspn - gets the length of a prefix substring.
  * @s: initial segment.
  * @accept: accepted bytes.
  * Return: the number of accepted bytes.
  */
+
 int _strspn(char *s, char *accept)
 {
 	int i, j, bool;
@@ -1020,6 +1063,7 @@ int _strspn(char *s, char *accept)
  * @s: Type char pointer str
  * Return: duplicated str
  */
+
 char *_strdup(const char *s)
 {
 	char *new;
@@ -1038,6 +1082,7 @@ char *_strdup(const char *s)
  * @s: Type char pointer
  * Return: Always 0.
  */
+
 int _strlen(const char *s)
 {
 	int len;
@@ -1057,6 +1102,7 @@ int _strlen(const char *s)
  *
  * Return: no return.
  */
+
 void _memcpy(void *newptr, const void *ptr, unsigned int size)
 {
         char *char_ptr = (char *)ptr;
@@ -1069,13 +1115,14 @@ void _memcpy(void *newptr, const void *ptr, unsigned int size)
 
 
 /**
- * cmp_chars - compare chars of strings
+ * liken_chars - compare chars of strings
  * @str: input string.
  * @delim: delimiter.
  *
  * Return: 1 if are equals, 0 if not.
  */
-int cmp_chars(char str[], const char *delim)
+
+int liken_chars(char str[], const char *delim)
 {
 	unsigned int i, j, k;
 
@@ -1102,6 +1149,7 @@ int cmp_chars(char str[], const char *delim)
  *
  * Return: string splited.
  */
+
 char *_strtok(char str[], const char *delim)
 {
 	static char *splitted, *str_end;
@@ -1110,7 +1158,7 @@ char *_strtok(char str[], const char *delim)
 
 	if (str != NULL)
 	{
-		if (cmp_chars(str, delim))
+		if (liken_chars(str, delim))
 			return (NULL);
 		splitted = str; /*Store first address*/
 		i = _strlen(str);
@@ -1171,6 +1219,7 @@ char *_strtok(char str[], const char *delim)
  * @s: input string
  * Return: 1 if string is a number. 0 in other case.
  */
+
 int _isdigit(const char *s)
 {
 	unsigned int i;
@@ -1201,11 +1250,12 @@ int _isdigit(const char *s)
 
 
 /**
- * rev_string - reverses a string.
+ * undo_string - reverses a string.
  * @s: input string.
  * Return: no return.
  */
-void rev_string(char *s)
+
+void undo_string(char *s)
 {
 	int count = 0, i, j;
 	char *str, temp;
@@ -1246,13 +1296,14 @@ void rev_string(char *s)
 
 
 /**
- * cd_dot - changes to the parent directory
+ * CDir_ftp - changes to the parent directory
  *
  * @datash: data relevant (environ)
  *
  * Return: no return
  */
-void cd_dot(data_shell *datash)
+
+void CDir_ftp(data_shell *datash)
 {
 	char pwd[PATH_MAX];
 	char *dir, *cp_pwd, *cp_strtok_pwd;
@@ -1273,14 +1324,14 @@ void cd_dot(data_shell *datash)
 		return;
 	}
 	cp_strtok_pwd = cp_pwd;
-	rev_string(cp_strtok_pwd);
+	undo_string(cp_strtok_pwd);
 	cp_strtok_pwd = _strtok(cp_strtok_pwd, "/");
 	if (cp_strtok_pwd != NULL)
 	{
 		cp_strtok_pwd = _strtok(NULL, "\0");
 
 		if (cp_strtok_pwd != NULL)
-			rev_string(cp_strtok_pwd);
+			undo_string(cp_strtok_pwd);
 	}
 	if (cp_strtok_pwd != NULL)
 	{
@@ -1297,13 +1348,14 @@ void cd_dot(data_shell *datash)
 }
 
 /**
- * cd_to - changes to a directory given
+ * CDir_loc - changes to a directory given
  * by the user
  *
  * @datash: data relevant (directories)
  * Return: no return
  */
-void cd_to(data_shell *datash)
+
+void CDir_loc(data_shell *datash)
 {
 	char pwd[PATH_MAX];
 	char *dir, *cp_pwd, *cp_dir;
@@ -1332,12 +1384,13 @@ void cd_to(data_shell *datash)
 }
 
 /**
- * cd_previous - changes to the previous directory
+ * CDir_last - changes to the previous directory
  *
  * @datash: data relevant (environ)
  * Return: no return
  */
-void cd_previous(data_shell *datash)
+
+void CDir_last(data_shell *datash)
 {
 	char pwd[PATH_MAX];
 	char *p_pwd, *p_oldpwd, *cp_pwd, *cp_oldpwd;
@@ -1374,12 +1427,13 @@ void cd_previous(data_shell *datash)
 }
 
 /**
- * cd_to_home - changes to home directory
+ * CDir_loc_HM - changes to home directory
  *
  * @datash: data relevant (environ)
  * Return: no return
  */
-void cd_to_home(data_shell *datash)
+
+void CDir_loc_HM(data_shell *datash)
 {
 	char *p_pwd, *home;
 	char pwd[PATH_MAX];
@@ -1410,12 +1464,13 @@ void cd_to_home(data_shell *datash)
 }
 
 /**
- * cd_shell - changes current directory
+ * CDir_SH - changes current directory
  *
  * @datash: data relevant
  * Return: 1 on success
  */
-int cd_shell(data_shell *datash)
+
+int CDir_SH(data_shell *datash)
 {
 	char *dir;
 	int ishome, ishome2, isddash;
@@ -1431,23 +1486,23 @@ int cd_shell(data_shell *datash)
 
 	if (dir == NULL || !ishome || !ishome2 || !isddash)
 	{
-		cd_to_home(datash);
+		CDir_loc_HM(datash);
 		return (1);
 	}
 
 	if (_strcmp("-", dir) == 0)
 	{
-		cd_previous(datash);
+		CDir_last(datash);
 		return (1);
 	}
 
 	if (_strcmp(".", dir) == 0 || _strcmp("..", dir) == 0)
 	{
-		cd_dot(datash);
+		CDir_ftp(datash);
 		return (1);
 	}
 
-	cd_to(datash);
+	CDir_loc(datash);
 
 	return (1);
 }
@@ -1476,29 +1531,31 @@ int cd_shell(data_shell *datash)
 
 
 /**
- * repeated_char - counts the repetitions of a char
+ * dup_Char - counts the repetitions of a char
  *
  * @input: input string
  * @i: index
  * Return: repetitions
  */
-int repeated_char(char *input, int i)
+
+int dup_Char(char *input, int i)
 {
 	if (*(input - 1) == *input)
-		return (repeated_char(input - 1, i + 1));
+		return (dup_Char(input - 1, i + 1));
 
 	return (i);
 }
 
 
 /**
- * first_char - finds index of the first char
+ * basic_Char - finds index of the first char
  *
  * @input: input string
  * @i: index
  * Return: 1 if there is an error. 0 in other case.
  */
-int first_char(char *input, int *i)
+
+int basic_Char(char *input, int *i)
 {
 
 	for (*i = 0; input[*i]; *i += 1)
@@ -1531,7 +1588,7 @@ int first_char(char *input, int *i)
 
 
 /**
- * error_sep_op - finds syntax errors
+ * err_sep_OP - finds syntax errors
  *
  * @input: input string
  * @i: index
@@ -1539,7 +1596,8 @@ int first_char(char *input, int *i)
  * Return: index of error. 0 when there are no
  * errors
  */
-int error_sep_op(char *input, int i, char last)
+
+int err_sep_OP(char *input, int i, char last)
 {
         int count;
 
@@ -1548,7 +1606,7 @@ int error_sep_op(char *input, int i, char last)
                 return (0);
 
         if (*input == ' ' || *input == '\t')
-                return (error_sep_op(input + 1, i + 1, last));
+                return (err_sep_OP(input + 1, i + 1, last));
 
         if (*input == ';')
                 if (last == '|' || last == '&' || last == ';')
@@ -1561,7 +1619,7 @@ int error_sep_op(char *input, int i, char last)
 
                 if (last == '|')
                 {
-                        count = repeated_char(input, 0);
+                        count = dup_Char(input, 0);
                         if (count == 0 || count > 1)
                                 return (i);
                 }
@@ -1574,26 +1632,29 @@ int error_sep_op(char *input, int i, char last)
 
                 if (last == '&')
                 {
-                        count = repeated_char(input, 0);
+                        count = dup_Char(input, 0);
                         if (count == 0 || count > 1)
                                 return (i);
                 }
         }
 
-        return (error_sep_op(input + 1, i + 1, *input));
+        return (err_sep_OP(input + 1, i + 1, *input));
 }
 
 
 /**
- * print_syntax_error - prints when a syntax error is found
+ * dis_stx_err - prints when a syntax error is found
  *
+ * @datash: data structure
+ * @input: input string
  * @datash: data structure
  * @input: input string
  * @i: index of the error
  * @bool: to control msg error
  * Return: no return
  */
-void print_syntax_error(data_shell *datash, char *input, int i, int bool)
+
+void dis_stx_err(data_shell *datash, char *input, int i, int bool)
 {
 	char *msg, *msg2, *msg3, *error, *counter;
 	int length;
@@ -1614,7 +1675,7 @@ void print_syntax_error(data_shell *datash, char *input, int i, int bool)
 
 	msg2 = ": Syntax error: \"";
 	msg3 = "\" unexpected\n";
-	counter = aux_itoa(datash->counter);
+	counter = aut_itoa(datash->counter);
 	length = _strlen(datash->av[0]) + _strlen(counter);
 	length += _strlen(msg) + _strlen(msg2) + _strlen(msg3) + 2;
 
@@ -1638,30 +1699,31 @@ void print_syntax_error(data_shell *datash, char *input, int i, int bool)
 }
 
 /**
- * check_syntax_error - intermediate function to
+ * confirm_stx_err - intermediate function to
  * find and print a syntax error
  *
  * @datash: data structure
  * @input: input string
  * Return: 1 if there is an error. 0 in other case
  */
-int check_syntax_error(data_shell *datash, char *input)
+
+int confirm_stx_err(data_shell *datash, char *input)
 {
 	int begin = 0;
 	int f_char = 0;
 	int i = 0;
 
-	f_char = first_char(input, &begin);
+	f_char = basic_Char(input, &begin);
 	if (f_char == -1)
 	{
-		print_syntax_error(datash, input, begin, 0);
+		dis_stx_err(datash, input, begin, 0);
 		return (1);
 	}
 
-	i = error_sep_op(input + begin, 0, *(input + begin));
+	i = err_sep_OP(input + begin, 0, *(input + begin));
 	if (i != 0)
 	{
-		print_syntax_error(datash, input, begin + i, 1);
+		dis_stx_err(datash, input, begin + i, 1);
 		return (1);
 	}
 
@@ -2268,7 +2330,7 @@ int (*get_builtin(char *cmd))(data_shell *)
 		{ "exit", exit_shell },
 		{ "setenv", _setenv },
 		{ "unsetenv", _unsetenv },
-		{ "cd", cd_shell },
+		{ "cd", CDir_SH },
 		{ "help", get_help },
 		{ NULL, NULL }
 	};
@@ -2296,19 +2358,19 @@ int get_error(data_shell *datash, int eval)
 	switch (eval)
 	{
 	case -1:
-		error = error_env(datash);
+		error = err_env_msg(datash);
 		break;
 	case 126:
-		error = error_path_126(datash);
+		error = err_RD_126(datash);
 		break;
 	case 127:
-		error = error_not_found(datash);
+		error = err_missing(datash);
 		break;
 	case 2:
 		if (_strcmp("exit", datash->args[0]) == 0)
-			error = error_exit_shell(datash);
+			error = err_EXT_sh(datash);
 		else if (_strcmp("cd", datash->args[0]) == 0)
-			error = error_get_cd(datash);
+			error = err_getCdir(datash);
 		break;
 	}
 
@@ -2331,21 +2393,21 @@ int get_help(data_shell *datash)
 {
 
 	if (datash->args[1] == 0)
-		aux_help_general();
+		aut_asst_Gen();
 	else if (_strcmp(datash->args[1], "setenv") == 0)
-		aux_help_setenv();
+		aut_asst_setenv();
 	else if (_strcmp(datash->args[1], "env") == 0)
-		aux_help_env();
+		aut_asst_env();
 	else if (_strcmp(datash->args[1], "unsetenv") == 0)
-		aux_help_unsetenv();
+		aut_asst_unsetenv();
 	else if (_strcmp(datash->args[1], "help") == 0)
-		aux_help();
+		aut_asst();
 	else if (_strcmp(datash->args[1], "exit") == 0)
-		aux_help_exit();
+		aut_asst_Ext();
 	else if (_strcmp(datash->args[1], "cd") == 0)
-		aux_help_cd();
+		aut_asst_CDir();
 	else if (_strcmp(datash->args[1], "alias") == 0)
-		aux_help_alias();
+		aut_asst_alias();
 	else
 		write(STDERR_FILENO, datash->args[0],
 		      _strlen(datash->args[0]));
@@ -2531,7 +2593,7 @@ void check_env(r_var **h, char *in, data_shell *data)
 			if (_envr[row][chr] == '=')
 			{
 				lval = _strlen(_envr[row] + chr + 1);
-				add_rvar_node(h, j, _envr[row] + chr + 1, lval);
+				inc_Rvar_node(h, j, _envr[row] + chr + 1, lval);
 				return;
 			}
 
@@ -2548,7 +2610,7 @@ void check_env(r_var **h, char *in, data_shell *data)
 			break;
 	}
 
-	add_rvar_node(h, j, NULL, 0);
+	inc_Rvar_node(h, j, NULL, 0);
 }
 
 /**
@@ -2572,19 +2634,19 @@ int check_vars(r_var **h, char *in, char *st, data_shell *data)
 		if (in[i] == '$')
 		{
 			if (in[i + 1] == '?')
-				add_rvar_node(h, 2, st, lst), i++;
+				inc_Rvar_node(h, 2, st, lst), i++;
 			else if (in[i + 1] == '$')
-				add_rvar_node(h, 2, data->pid, lpd), i++;
+				inc_Rvar_node(h, 2, data->pid, lpd), i++;
 			else if (in[i + 1] == '\n')
-				add_rvar_node(h, 0, NULL, 0);
+				inc_Rvar_node(h, 0, NULL, 0);
 			else if (in[i + 1] == '\0')
-				add_rvar_node(h, 0, NULL, 0);
+				inc_Rvar_node(h, 0, NULL, 0);
 			else if (in[i + 1] == ' ')
-				add_rvar_node(h, 0, NULL, 0);
+				inc_Rvar_node(h, 0, NULL, 0);
 			else if (in[i + 1] == '\t')
-				add_rvar_node(h, 0, NULL, 0);
+				inc_Rvar_node(h, 0, NULL, 0);
 			else if (in[i + 1] == ';')
-				add_rvar_node(h, 0, NULL, 0);
+				inc_Rvar_node(h, 0, NULL, 0);
 			else
 				check_env(h, in + i, data);
 		}
@@ -2708,7 +2770,7 @@ char *rep_var(char *input, data_shell *datash)
 	char *status, *new_input;
 	int olen, nlen;
 
-	status = aux_itoa(datash->status);
+	status = aut_itoa(datash->status);
 	head = NULL;
 
 	olen = check_vars(&head, input, status, datash);
@@ -2737,7 +2799,7 @@ char *rep_var(char *input, data_shell *datash)
 
 	free(input);
 	free(status);
-	free_rvar_list(&head);
+	empt_Rvar_list(&head);
 
 	return (new_input);
 }
@@ -2822,7 +2884,7 @@ void shell_loop(data_shell *datash)
 			if (input == NULL)
 				continue;
 
-			if (check_syntax_error(datash, input) == 1)
+			if (confirm_stx_err(datash, input) == 1)
 			{
 				datash->status = 2;
 				free(input);
@@ -2924,11 +2986,11 @@ void add_nodes(sep_list **head_s, line_list **head_l, char *input)
 	for (i = 0; input[i]; i++)
 	{
 		if (input[i] == ';')
-			add_sep_node_end(head_s, input[i]);
+			inc_dif_node_extr(head_s, input[i]);
 
 		if (input[i] == '|' || input[i] == '&')
 		{
-			add_sep_node_end(head_s, input[i]);
+			inc_dif_node_extr(head_s, input[i]);
 			i++;
 		}
 	}
@@ -2936,7 +2998,7 @@ void add_nodes(sep_list **head_s, line_list **head_l, char *input)
 	line = _strtok(input, ";|&");
 	do {
 		line = swap_char(line, 1);
-		add_line_node_end(head_l, line);
+		inc_LN_node_extr(head_l, line);
 		line = _strtok(NULL, ";|&");
 	} while (line != NULL);
 
@@ -3046,8 +3108,8 @@ int split_commands(data_shell *datash, char *input)
 			list_l = list_l->next;
 	}
 
-	free_sep_list(&head_s);
-	free_line_list(&head_l);
+	empt_dif_list(&head_s);
+	empt_LN_list(&head_l);
 
 	if (loop == 0)
 		return (0);
@@ -3093,6 +3155,6 @@ char **split_line(char *input)
 		token = _strtok(NULL, TOK_DELIM);
 		tokens[i] = token;
 	}
-
+	
 	return (tokens);
 }

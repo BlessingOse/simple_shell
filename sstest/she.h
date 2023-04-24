@@ -1,5 +1,5 @@
-#ifndef _SHE.H_
-#define _SHE.H_
+#ifndef _SHE_H_
+#define _SHE_H_
 
 #include <stdio.h>
 #include <unistd.h>
@@ -93,15 +93,16 @@ typedef struct builtin_s
 } builtin_t;
 
 /* aux_lists.c */
-sep_list *add_sep_node_end(sep_list **head, char sep);
-void free_sep_list(sep_list **head);
-line_list *add_line_node_end(line_list **head, char *line);
-void free_line_list(line_list **head);
+sep_list *inc_dif_node_extr(sep_list **head, char sep);
+void empt_dif_list(sep_list **head);
+line_list *inc_LN_node_extr(line_list **head, char *line);
+void empt_LN_list(line_list **head);
 void freeDataFxn(data_shell *datash);
+void init_data(data_shell *datash, char **av);
 
 /* aux_lists2.c */
-r_var *add_rvar_node(r_var **head, int lvar, char *var, int lval);
-void free_rvar_list(r_var **head);
+r_var *inc_Rvar_node(r_var **head, int lvar, char *var, int lval);
+void empt_Rvar_list(r_var **head);
 
 /* aux_str functions */
 char *_strcat(char *dest, const char *src);
@@ -118,19 +119,19 @@ char **_reallocdp(char **ptr, unsigned int old_size, unsigned int new_size);
 /* aux_str2.c */
 char *_strdup(const char *s);
 int _strlen(const char *s);
-int cmp_chars(char str[], const char *delim);
+int liken_chars(char str[], const char *delim);
 char *_strtok(char str[], const char *delim);
 int _isdigit(const char *s);
 
 /* aux_str3.c */
-void rev_string(char *s);
+void undo_string(char *s);
 
 /* check_syntax_error.c */
-int repeated_char(char *input, int i);
-int error_sep_op(char *input, int i, char last);
-int first_char(char *input, int *i);
-void print_syntax_error(data_shell *datash, char *input, int i, int bool);
-int check_syntax_error(data_shell *datash, char *input);
+int dup_Char(char *input, int i);
+int err_sep_OP(char *input, int i, char last);
+int basic_Char(char *input, int *i);
+void dis_stx_err(data_shell *datash, char *input, int i, int bool);
+int confirm_stx_err(data_shell *datash, char *input);
 
 /* shell_loop.c */
 char *without_comment(char *in);
@@ -177,13 +178,13 @@ int _setenv(data_shell *datash);
 int _unsetenv(data_shell *datash);
 
 /* cd.c */
-void cd_dot(data_shell *datash);
-void cd_to(data_shell *datash);
-void cd_previous(data_shell *datash);
-void cd_to_home(data_shell *datash);
+void CDir_ftp(data_shell *datash);
+void CDir_loc(data_shell *datash);
+void CDir_last(data_shell *datash);
+void CDir_loc_HM(data_shell *datash);
 
 /* cd_shell.c */
-int cd_shell(data_shell *datash);
+int CDir_SH(data_shell *datash);
 
 /* get_builtin */
 int (*get_builtin(char *cmd))(data_shell *datash);
@@ -192,22 +193,22 @@ int (*get_builtin(char *cmd))(data_shell *datash);
 int exit_shell(data_shell *datash);
 
 /* aux_stdlib.c */
-int get_len(int n);
-char *aux_itoa(int n);
+int fetch_len(int n);
+char *aut_itoa(int n);
 int _atoi(char *s);
 
 /* aux_error1.c */
-char *strcat_cd(data_shell *, char *, char *, char *);
-char *error_get_cd(data_shell *datash);
-char *error_not_found(data_shell *datash);
-char *error_exit_shell(data_shell *datash);
+char *strCat_cdir(data_shell *, char *, char *, char *);
+char *err_getCdir(data_shell *datash);
+char *err_missing(data_shell *datash);
+char *err_EXT_sh(data_shell *datash);
 
 /* aux_error2.c */
 char *error_get_alias(char **args);
-char *error_env(data_shell *datash);
+char *err_env_msg(data_shell *datash);
 char *error_syntax(char **args);
 char *error_permission(char **args);
-char *error_path_126(data_shell *datash);
+char *err_RD_126(data_shell *datash);
 
 
 /* get_error.c */
@@ -217,16 +218,16 @@ int get_error(data_shell *datash, int eval);
 void get_sigint(int sig);
 
 /* aux_help.c */
-void aux_help_env(void);
-void aux_help_setenv(void);
-void aux_help_unsetenv(void);
-void aux_help_general(void);
-void aux_help_exit(void);
+void aut_asst_env(void);
+void aut_asst_setenv(void);
+void aut_asst_unsetenv(void);
+void aut_asst_Gen(void);
+void aut_asst_Ext(void);
 
 /* aux_help2.c */
-void aux_help(void);
-void aux_help_alias(void);
-void aux_help_cd(void);
+void aut_asst(void);
+void aut_asst_alias(void);
+void aut_asst_CDir(void);
 
 /* get_help.c */
 int get_help(data_shell *datash);
