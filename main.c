@@ -1,4 +1,4 @@
-#include "sh.h"
+#include "ssh.h"
 
 /**
  * freeDataFxn - frees data structure
