@@ -134,46 +134,47 @@ void dis_stx_err(data_shell *datash, char *input, int i, int bool);
 int confirm_stx_err(data_shell *datash, char *input);
 
 /* shell_loop.c */
-char *without_comment(char *in);
-void shell_loop(data_shell *datash);
+char *RMV_com(char *in);
+void SH_loop(data_shell *datash);
 
 /* read_line.c */
-char *read_line(int *i_eof);
+char *scan_LN(int *i_eof);
 
 /* split.c */
-char *swap_char(char *input, int bool);
-void add_nodes(sep_list **head_s, line_list **head_l, char *input);
-void go_next(sep_list **list_s, line_list **list_l, data_shell *datash);
-int split_commands(data_shell *datash, char *input);
-char **split_line(char *input);
+char *EXCH_char(char *input, int bool);
+void inc_nodes(sep_list **head_s, line_list **head_l, char *input);
+void nxt_cmd(sep_list **list_s, line_list **list_l, data_shell *datash);
+int SEP_cMDS(data_shell *datash, char *input);
+char **sep_LN(char *input);
 
 /* rep_var.c */
-void check_env(r_var **h, char *in, data_shell *data);
-int check_vars(r_var **h, char *in, char *st, data_shell *data);
-char *replaced_input(r_var **head, char *input, char *new_input, int nlen);
-char *rep_var(char *input, data_shell *datash);
+void confirm_ENV(r_var **h, char *in, data_shell *data);
+int confirm_VARS(r_var **h, char *in, char *st, data_shell *data);
+char *rest_inp(r_var **head, char *input, char *new_input, int nlen);
+char *rest_VAR(char *input, data_shell *datash);
 
 /* get_line.c */
-void bring_line(char **lineptr, size_t *n, char *buffer, size_t j);
-ssize_t get_line(char **lineptr, size_t *n, FILE *stream);
+void show_LN(char **lineptr, size_t *n, char *buffer, size_t j);
+ssize_t fetch_LN(char **lineptr, size_t *n, FILE *stream);
 
 /* exec_line */
-int exec_line(data_shell *datash);
+int XCute_line(data_shell *datash);
 
 /* cmd_exec.c */
-int is_cdir(char *path, int *i);
-char *_which(char *cmd, char **_environ);
-int is_executable(data_shell *datash);
-int check_error_cmd(char *dir, data_shell *datash);
-int cmd_exec(data_shell *datash);
+int test_CDir(char *path, int *i);
+char *_locate(char *cmd, char **_environ);
+int test_EXEcute(data_shell *datash);
+int confirm_ERR(char *dir, data_shell *datash);
+int CMD_XC(data_shell *datash);
 
 /* env1.c */
 char *_getenv(const char *name, char **_environ);
 int _env(data_shell *datash);
+int jux_ENV_ID(const char *nenv, const char *name);
 
 /* env2.c */
-char *copy_info(char *name, char *value);
-void set_env(char *name, char *value, data_shell *datash);
+char *MIM_detail(char *name, char *value);
+void PREP_env(char *name, char *value, data_shell *datash);
 int _setenv(data_shell *datash);
 int _unsetenv(data_shell *datash);
 
@@ -187,10 +188,10 @@ void CDir_loc_HM(data_shell *datash);
 int CDir_SH(data_shell *datash);
 
 /* get_builtin */
-int (*get_builtin(char *cmd))(data_shell *datash);
+int (*fetch_builtin(char *cmd))(data_shell *datash);
 
 /* _exit.c */
-int exit_shell(data_shell *datash);
+int quit_SH(data_shell *datash);
 
 /* aux_stdlib.c */
 int fetch_len(int n);
@@ -212,10 +213,10 @@ char *err_RD_126(data_shell *datash);
 
 
 /* get_error.c */
-int get_error(data_shell *datash, int eval);
+int fetch_ERR(data_shell *datash, int eval);
 
 /* get_sigint.c */
-void get_sigint(int sig);
+void fetch_SIGINT(int sig);
 
 /* aux_help.c */
 void aut_asst_env(void);
@@ -230,6 +231,6 @@ void aut_asst_alias(void);
 void aut_asst_CDir(void);
 
 /* get_help.c */
-int get_help(data_shell *datash);
+int fetch_asst(data_shell *datash);
 
 #endif
