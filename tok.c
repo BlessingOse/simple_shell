@@ -1,4 +1,4 @@
-#include "she.h"
+#include "ssh.h"
 
 /**
  * sep_LN - tokenizes the input string
@@ -6,11 +6,10 @@
  * @input: input string.
  * Return: string splitted.
  */
-
 char **sep_LN(char *input)
 {
 	size_t bsize;
-	size_t i;
+	size_t x;
 	char **tokens;
 	char *token;
 
@@ -25,17 +24,20 @@ char **sep_LN(char *input)
 	token = _strtok(input, TOK_DELIM);
 	tokens[0] = token;
 
-	for (i = 1; token != NULL; i++)
+	for (x = 1; token != NULL; x++)
 	{
-		if (i == bsize)
+		if (x == bsize)
 		{
 			bsize += TOK_BUFSIZE;
-			tokens = _reallocdp(tokens, i, sizeof(char *) * bsize);
+			tokens = _reallocdp(tokens, x, sizeof(char *) * bsize);
 			if (tokens == NULL)
-			{	write(STDERR_FILENO, ": allocation error\n", 18);
+			{
+				write(STDERR_FILENO, ": allocation error\n", 18);
+				exit(EXIT_FAILURE);
 			}
+		}
 		token = _strtok(NULL, TOK_DELIM);
-		tokens[i] = token;
+		tokens[x] = token;
 	}
 
 	return (tokens);

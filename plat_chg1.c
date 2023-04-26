@@ -79,11 +79,6 @@ int CDir_SH(data_shell *datash)
 	CDir_loc(datash);
 
 	return (1);
-	}
-
-	CDir_loc(datash);
-
-	return (1);
 }
 
 /**

@@ -140,7 +140,7 @@ void CDir_last(data_shell *datash)
 	else
 		cp_oldpwd = _strdup(p_oldpwd);
 
-		PREP_env("OLDPWD", cp_pwd, datash);
+	PREP_env("OLDPWD", cp_pwd, datash);
 
 	if (chdir(cp_oldpwd) == -1)
 		PREP_env("PWD", cp_pwd, datash);

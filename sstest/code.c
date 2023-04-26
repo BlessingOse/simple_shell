@@ -2576,7 +2576,7 @@ ssize_t fetch_LN(char **lineptr, size_t *n, FILE *stream)
 void fetch_SIGINT(int sig)
 {
 	(void)sig;
-	write(STDOUT_FILENO, "\nblessing ", 20);
+	write(STDOUT_FILENO, "\nblessing ", 10);
 }
 
 

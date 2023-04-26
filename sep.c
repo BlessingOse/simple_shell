@@ -11,20 +11,20 @@
 
 void inc_nodes(sep_list **head_s, line_list **head_l, char *input)
 {
-	int i;
+	int x;
 	char *line;
 
 	input = EXCH_char(input, 0);
 
-	for (i = 0; input[i]; i++)
+	for (x = 0; input[x]; x++)
 	{
-		if (input[i] == ';')
-			inc_dif_node_extr(head_s, input[i]);
+		if (input[x] == ';')
+			inc_dif_node_extr(head_s, input[x]);
 
-		if (input[i] == '|' || input[i] == '&')
+		if (input[x] == '|' || input[x] == '&')
 		{
-			inc_dif_node_extr(head_s, input[i]);
-			i++;
+			inc_dif_node_extr(head_s, input[x]);
+			x++;
 		}
 	}
 
@@ -63,14 +63,14 @@ void nxt_cmd(sep_list **list_s, line_list **list_l, data_shell *datash)
 			if (ls_s->separator == '&' || ls_s->separator == ';')
 				loop_sep = 0;
 			if (ls_s->separator == '|')
-			ls_l = ls_l->next, ls_s = ls_s->next;
+				ls_l = ls_l->next, ls_s = ls_s->next;
 		}
 		else
 		{
-			loop_sep = 0;
-		if (ls_s->separator == '&')
-		}
-			ls_l = ls_l->next, ls_s = ls_s->next;
+			if (ls_s->separator == '|' || ls_s->separator == ';')
+				loop_sep = 0;
+			if (ls_s->separator == '&')
+				ls_l = ls_l->next, ls_s = ls_s->next;
 		}
 		if (ls_s != NULL && !loop_sep)
 			ls_s = ls_s->next;
@@ -79,6 +79,7 @@ void nxt_cmd(sep_list **list_s, line_list **list_l, data_shell *datash)
 	*list_s = ls_s;
 	*list_l = ls_l;
 }
+
 
 /**
  * SEP_cMDS - splits command lines according to
